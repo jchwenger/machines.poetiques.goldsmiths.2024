@@ -1,0 +1,6 @@
+# vim
+
+*.sw*
+
+# empty example
+empty-example/
