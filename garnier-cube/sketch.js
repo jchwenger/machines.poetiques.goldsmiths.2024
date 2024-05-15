@@ -1,12 +1,15 @@
-// let angle = 0;
+let mode = 0; // 0 = autonomous, 1 = mouse
+
+// for mouse mode
 let angleX = 0;
 let angleY = 0;
 let angleZ = 0;
-let textures = [];
 
 let lastMouseX = 0;
 let lastMouseY = 0;
 let rotationSpeed = 0.01;
+
+let textures = [];
 
 function preload() {
 
@@ -44,9 +47,6 @@ function setup() {
 
 function draw() {
   background(255);
-  // rotateX(angle);
-  // rotateY(angle * 0.4);
-  // rotateZ(angle * 0.1);
 
   rotateX(angleX);
   rotateY(angleY);
@@ -81,24 +81,42 @@ function draw() {
   }
   endShape(CLOSE);
 
-  // angle += 0.01;
+  // TODO: make transition from manual smooth
+  if (mode === 0) {
+    angleX += 0.01;
+    angleY = angleX * 0.4;
+    angleZ = angleX * 0.1;
+    console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
+  }
 
 }
 
-// Rotation logic
+// Rotation logic:
+//   - horizontal drag: rotates x
+//   - vertical drag: rotates z
 function mouseDragged() {
+  mode = 1; // automatically move to manual
   let dx = mouseX - lastMouseX;
   let dy = mouseY - lastMouseY;
-  angleY -= dx * rotationSpeed;
   angleX -= dy * rotationSpeed;
+  angleY += dx * rotationSpeed;
   lastMouseX = mouseX;
   lastMouseY = mouseY;
+  console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
 }
 
 function mousePressed() {
   // Update the last mouse position when mouse is pressed to prevent jumping.
   lastMouseX = mouseX;
   lastMouseY = mouseY;
+}
+
+function keyPressed() {
+  // press space to switch between automatic and mouse mode
+  if (key === ' ') {
+    mode = (mode + 1) % 2; // modulo logic to toggle between 0 & 1
+    // console.log(`mode is now ${mode}`);
+  }
 }
 
 // --------------------------------------------------------------------------------
@@ -110,19 +128,16 @@ function faceRed() {
   // colour stolen from the picture
   gfx.background(193, 0, 0);
 
-  // surrounding square
-  gfx.stroke(0);
-  gfx.noFill();
-  gfx.rect(1, 1, gfx.width - 1, gfx.height - 1);
-
-  // work from the centre
-  gfx.translate(gfx.width/2, gfx.width/2);
+  drawBoundaries(gfx); // surrounding square
+  
+  gfx.translate(gfx.width/2, gfx.width/2); // work from the centre
 
   // base circle
   gfx.noFill();
   const diameter = gfx.width * .8;
   gfx.ellipse(0, 0, diameter, diameter);
 
+  // draw a red circle (erasing background) & write text
   function drawO(size, angle) {
     gfx.textAlign(CENTER, CENTER);
     gfx.textSize(size);
@@ -135,6 +150,7 @@ function faceRed() {
     gfx.text('o', sin(angle) * radius, cos(angle) * radius);
   }
 
+  // draw the three 'o's
   drawO(18, radians(150));
   drawO(23, radians(305));
   drawO(10, radians(55));
@@ -145,16 +161,9 @@ function faceRed() {
 function faceO() {
   let gfx = createGraphics(200, 200);
   gfx.background(255);
-  // surrounding square
-  gfx.stroke(0);
-  gfx.noFill();
-  gfx.rect(1, 1, gfx.width - 1, gfx.height - 1);
-  gfx.textFont('Courier New');
-  gfx.stroke(0);
-  gfx.fill(0);
-  gfx.textAlign(CENTER, CENTER);
-  gfx.textSize(40);
-  gfx.translate(gfx.width/2, gfx.width/2);
+  // prepare font, boundaries, translate to centre, setup text
+  prepareFace(gfx, 45);
+  // draw text
   gfx.text('o', 0, 0);
   return gfx;
 }
@@ -162,29 +171,27 @@ function faceO() {
 function faceAlphabet() {
   let gfx = createGraphics(200, 200);
   gfx.background(255);
-  // surrounding square
-  gfx.stroke(0);
-  gfx.noFill();
-  gfx.rect(1, 1, gfx.width - 1, gfx.height - 1);
-  gfx.fill(0);
-  gfx.textAlign(CENTER, CENTER);
-  gfx.textFont('Courier New');
-  gfx.stroke(0);
+  // prepare font, boundaries, translate to centre, setup text
+  prepareFace(gfx);
+  gfx.translate(-20, -20); // move back from the middle
   const al = 'abcdefghijklmnopqrstuvwxyz';
-  gfx.textSize(12);
-  gfx.translate(gfx.width/2.5, gfx.width/2.5);
   const spacing = 12;
   let row = 0;
   let col = 0;
+  // loop through all the letters
   for (let i = 0; i < al.length; i++) {
     const c = al.charAt(i);
+    // skip letter 'o'
     if (c === 'o') {
+    // exception for letter 'z'
     } else if (c === 'z') {
       col = 2;
       gfx.text(c, col * spacing, row * spacing);
+    // all other letters
     } else {
       gfx.text(c, col * spacing, row * spacing);
     }
+    // updating cols & rows
     col++;
     if (i % 5 === 4) {
       row++;
@@ -197,15 +204,11 @@ function faceAlphabet() {
 function faceMond() {
   let gfx = createGraphics(200, 200);
   gfx.background(255);
-  gfx.textFont('Courier New');
-  gfx.stroke(0);
-  gfx.noFill();
-  gfx.rect(1, 1, gfx.width - 1, gfx.height - 1);
-  gfx.fill(0);
-  gfx.textSize(12);
-  gfx.textAlign(CENTER, CENTER);
-  gfx.translate(gfx.width/2, gfx.width/2);
+  // prepare font, boundaries, translate to centre, setup text
+  prepareFace(gfx);
+  // draw text
   gfx.text('m      o n d', 0, 0);
+  // draw arc
   gfx.noFill();
   gfx.stroke(0);
   const angle = 27;
@@ -218,15 +221,8 @@ function faceMond() {
 function faceLook() {
   let gfx = createGraphics(200, 200);
   gfx.background(255);
-  gfx.textFont('Courier New');
-  // surrounding square
-  gfx.stroke(0);
-  gfx.noFill();
-  gfx.rect(1, 1, gfx.width - 1, gfx.height - 1);
-  gfx.fill(0);
-  gfx.textSize(12);
-  gfx.textAlign(CENTER, CENTER);
-  gfx.translate(gfx.width/2, gfx.width/2);
+  // prepare font, boundaries, translate to centre, setup text
+  prepareFace(gfx);
   gfx.text('l    (o o)    k', 0, 0);
   return gfx;
 }
@@ -234,17 +230,11 @@ function faceLook() {
 function faceOeil() {
   let gfx = createGraphics(200, 200);
   gfx.background(255);
-  gfx.textFont('Courier New');
-  // surrounding square
-  gfx.stroke(0);
-  gfx.noFill();
-  gfx.rect(1, 1, gfx.width - 1, gfx.height - 1);
-  gfx.translate(gfx.width/2, gfx.width/2);
-  gfx.rotate(radians(180));
-  gfx.fill(0);
-  gfx.textSize(12);
+  // prepare font, boundaries, translate to centre, setup text
+  prepareFace(gfx);
+  gfx.rotate(radians(180)); // rotate entire face (after translation)
+
   // the 'oeil' bit (right)
-  gfx.textAlign(CENTER, CENTER);
   let radius1 = 45;
   let radius2 = 20;
   const nOeil = 7;
@@ -252,8 +242,8 @@ function faceOeil() {
     const ang = PI - radians(30 * i);
     gfx.text('oeil', radius1 * sin(ang), radius2 * cos(ang));
   }
+
   // the 'o' bit (left)
-  gfx.textAlign(CENTER, CENTER);
   const nO = 5;
   for (let i = 0; i < nO; i++) {
     const ang = PI + radians(40) + radians(125)/nO * i;
@@ -263,16 +253,36 @@ function faceOeil() {
   return gfx;
 }
 
+// Default face: grey background with 'Face ' and the face number
 function faceDefault(n) {
   let gfx = createGraphics(200, 200);
   gfx.background(100 + n * 25); // Different shades for each face
-  // surrounding square
+  drawBoundaries(gfx); // surrounding square
+  gfx.translate(gfx.width/2, gfx.width/2); // work from the centre
+  gfx.textAlign(CENTER, CENTER);
+  gfx.textSize(32);
+  gfx.fill(0);
+  // write the text
+  gfx.text('Face ' + (n + 1), 0, 0);
+  return gfx;
+}
+
+// --------------------------------------------------------------------------------
+// Face utils
+
+function drawBoundaries(gfx) {
   gfx.stroke(0);
   gfx.noFill();
   gfx.rect(1, 1, gfx.width - 1, gfx.height - 1);
-  gfx.fill(255);
+}
+
+// default params for each face
+function prepareFace(gfx, fontSize=12) {
+  gfx.textFont('Courier New');
+  drawBoundaries(gfx); // surrounding square
+  gfx.translate(gfx.width/2, gfx.width/2); // work from the centre
   gfx.textAlign(CENTER, CENTER);
-  gfx.textSize(32);
-  gfx.text('Face ' + (n + 1), 100, 100);
-  return gfx;
+  gfx.textSize(fontSize);
+  gfx.stroke(0);
+  gfx.fill(0);
 }
