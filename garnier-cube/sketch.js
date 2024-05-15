@@ -1,3 +1,31 @@
+// --------------------------------------------------------------------------------
+// Ilse Garnier, "Jeu de Cubes" in *Puzzle-Alphabet*, Paris: Éditions L'herbe qui tremble, 2010.
+//
+// Jérémie Wenger, 2024
+// With Iris Colomb, in the context of *Machines poétiques*: exploring textual
+// systems through experimental French poetry, Goldsmiths College
+// --------------------------------------------------------------------------------
+
+// Ideas for further development:
+// - This is just one cube! The main challenge is to change the colour and the
+//   main letter ('o'), and try and explore another direction!
+// - Is the cube as displayed really the same as in the template? Can you spot
+//   what is different, and how would you go about correcting that?
+// - Some of the faces, for instance faceLook, use literally no system at all.
+//   Is this satisfying to you? If not, you could think of what system led to 
+//   this particular configuration of letters (or transformation of a word),
+//   and see if you can recreated this hypothetical system, and apply it to
+//   different words? A similar comment can be said about faceMond, which is
+//   only partially systematised (and there might be better ways!).
+// - Can you make the faceOeil look even more like the original? Notice that
+//   here I used trigonometry and the equation of the ellipse to draw words
+//   on a hidden line/trajectory, but in the original her shape is even more
+//   horizontally squished, with more words on the extremities. Perhaps there
+//   is a way of achieving that? Another direction would be to find the
+//   equation for another shape (e.g. the 'infinity' sign?) and do something
+//   with that?
+
+
 let mode = 0; // 0 = autonomous, 1 = mouse
 
 // for mouse mode
@@ -86,7 +114,7 @@ function draw() {
     angleX += 0.01;
     angleY = angleX * 0.4;
     angleZ = angleX * 0.1;
-    console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
+    // console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
   }
 
 }
@@ -102,7 +130,7 @@ function mouseDragged() {
   angleY += dx * rotationSpeed;
   lastMouseX = mouseX;
   lastMouseY = mouseY;
-  console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
+  // console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
 }
 
 function mousePressed() {
@@ -238,6 +266,8 @@ function faceOeil() {
   let radius1 = 45;
   let radius2 = 20;
   const nOeil = 7;
+  // using trigonometry and the equation of the ellipse, see here:
+  // https://math.stackexchange.com/a/2019549
   for (let i = 0; i < nOeil; i++) {
     const ang = PI - radians(30 * i);
     gfx.text('oeil', radius1 * sin(ang), radius2 * cos(ang));
