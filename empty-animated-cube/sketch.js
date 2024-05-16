@@ -47,9 +47,9 @@ function draw() {
 
 function updateTexture(gfx, index) {
   gfx.background(100 + index * 25); // Animated background shade
-  gfx.fill(255);
+  gfx.fill(255 * index/10, 255 * (1/(index + 1)), 255 * (1 - (index/10)));
   gfx.textAlign(CENTER, CENTER);
-  gfx.textSize(32);
+  gfx.textSize(22);
   // Add dynamic content to the texture, e.g., a rotating text
-  gfx.text('Face ' + (index + 1), 100 + 50 * sin(angle), 100 + 50 * cos(angle));
+  gfx.text('Face ' + (index + 1), 100 + 50 * sin(angle * ((index+1)/.5)), 100 + 50 * cos(angle * ((index+1)/.5)));
 }
