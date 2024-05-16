@@ -1,10 +1,16 @@
 // --------------------------------------------------------------------------------
-// Ilse Garnier, "Jeu de Cubes" in *Puzzle-Alphabet*, Paris: Éditions L'herbe qui tremble, 2010.
+// Ilse Garnier, "Jeu de Cubes" in *Puzzle-Alphabet*, Paris: Éditions L'herbe
+// qui tremble, 2010.
 //
 // Jérémie Wenger, 2024
 // With Iris Colomb, in the context of *Machines poétiques*: exploring textual
 // systems through experimental French poetry, Goldsmiths College
 // --------------------------------------------------------------------------------
+
+// Controls:
+// - space bar: toggle random rotations
+// - mouse drag: rotate the square on the X and Y axes (deactivates autonomous
+//   movement)
 
 // Ideas for further development:
 // - This is just one cube! The main challenge is to change the colour and the
@@ -24,6 +30,10 @@
 //   is a way of achieving that? Another direction would be to find the
 //   equation for another shape (e.g. the 'infinity' sign?) and do something
 //   with that?
+// - One major path of exploration would be to do what Garnier never could:
+//   animate the faces! Note that in the current state the faces are built once
+//   in preload(), so that would have to be modified, so that animation could
+//   be added to them!
 
 
 let mode = 0; // 0 = autonomous, 1 = mouse
@@ -109,11 +119,42 @@ function draw() {
   }
   endShape(CLOSE);
 
-  // TODO: make transition from manual smooth
   if (mode === 0) {
-    angleX += 0.01;
-    angleY = angleX * 0.4;
-    angleZ = angleX * 0.1;
+
+    // Using noise (walking a 'random but smooth' landscape):
+    // Try commenting out two out of three to see only one movement!
+    // - noise() - .5 -> the number is within [-.5, .5], so that
+    //                   sometimes we go in one direction, sometimes
+    //                   the other
+    // - the division at the end controls the speed, making the update
+    //   smaller: /30 goes slower than /10
+    // - the division inside noise defines the step size on the landscape: if
+    //   the number is big, the steps are small -> the output is smoother 
+    //   (locally, when you walk very slowly, the landscape isn't very random);
+    //   if you make very big steps, e.g. not dividing frameCount at all, the 
+    //   movement will be very jittery, even static: that's because we just produce
+    //   random numbers [-.5, .5], the negative number cancelling each other out
+    //   (whereas if you have often similar numbers, they add up over time!)
+    // - the number added to framecount simply moves the starting point where we
+    //   'walk' on the random landscape: this ensures we get different random
+    //   numbers for each angle!
+    // See here: https://en.wikipedia.org/wiki/Perlin_noise
+    // And also the Shiffman tutorial:
+    // https://thecodingtrain.com/tracks/the-nature-of-code-2/noc/perlin/intro-to-perlin-noise
+
+    angleX += (noise(frameCount/1000) - .5)/30;
+    angleY += (noise((frameCount+5000)/1000) - .5)/10;
+    angleZ += (noise((frameCount+10000)/1000) - .5)/40;
+
+    // The first version: smooth movement only depending on angleX (note that
+    // this will provoke some jitter if you use the mouse, as then angleY and
+    // angleZ are reset to the value dictated by angleX as soon as you go back
+    // to autonomous mode!
+
+    // angleX += 0.01;
+    // angleY = angleX * 0.4;
+    // angleZ = angleX * 0.1;
+
     // console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
   }
 
@@ -140,7 +181,7 @@ function mousePressed() {
 }
 
 function keyPressed() {
-  // press space to switch between automatic and mouse mode
+  // Press space to switch between automatic and mouse mode
   if (key === ' ') {
     mode = (mode + 1) % 2; // modulo logic to toggle between 0 & 1
     // console.log(`mode is now ${mode}`);
@@ -173,6 +214,7 @@ function faceRed() {
     gfx.noStroke();
     gfx.fill(193, 0, 0);
     const hideRadius = (gfx.textAscent() + gfx.textDescent()) * .7;
+    // note: I use trigonometry to place the circle & text on the bigger circle!
     gfx.circle(sin(angle) * radius, cos(angle) * radius, hideRadius);
     gfx.fill(0);
     gfx.text('o', sin(angle) * radius, cos(angle) * radius);
