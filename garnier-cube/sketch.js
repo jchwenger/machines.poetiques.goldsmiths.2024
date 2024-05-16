@@ -33,7 +33,7 @@
 // - One major path of exploration would be to do what Garnier never could:
 //   animate the faces! Note that in the current state the faces are built once
 //   in preload(), so that would have to be modified, so that animation could
-//   be added to them!
+//   be added to them! Have a look at empty-animated-cube/ for an example.
 
 
 let mode = 0; // 0 = autonomous, 1 = mouse
