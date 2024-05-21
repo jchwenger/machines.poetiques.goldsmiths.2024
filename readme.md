@@ -1,7 +1,7 @@
 # 'Machines Poétiques'
 ## Introducing textual systems through experimental French poetry
 
-[Computational Arts MA/MFA Workshop, June 2024]().
+[Computational Arts MA/MFA Workshop, June 2024](https://docs.google.com/presentation/d/1ENzaC1gPqC9Mn6noXgAKkzEvILhWjiv2ogXm8GSpArU/edit?usp=sharing).
 
 Iris Colomb & Jérémie Wenger
 
@@ -10,6 +10,10 @@ Iris Colomb & Jérémie Wenger
 ### Empty example
 
 [P5.js sketch](empty-cube/)
+
+### Empty animated example
+
+[P5.js sketch](empty-animated-cube/)
 
 ### Ilse Garnier, 'Jeu de Cubes', from *Puzzle-Alphabet*, 1988
 
