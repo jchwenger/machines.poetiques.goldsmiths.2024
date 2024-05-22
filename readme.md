@@ -17,6 +17,6 @@ Iris Colomb & Jérémie Wenger
 
 ### Ilse Garnier, 'Jeu de Cubes', from *Puzzle-Alphabet*, 1988
 
-![Ilse Garnier, 'Jeu de Cubes'](pics/garnier-cube.jpg)
-
 [P5.js sketch](garnier-cube/)
+
+![Ilse Garnier, 'Jeu de Cubes'](pics/garnier-cube.jpg)
