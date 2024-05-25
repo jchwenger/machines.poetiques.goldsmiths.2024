@@ -51,32 +51,17 @@ let textures = [];
 
 function preload() {
 
-  // Create graphics for each face of the cube
-  for (let i = 0; i < 6; i++) {
-    switch(i) {
-      case 0:
-        textures.push(faceRed());
-        break;
-      case 1:
-        textures.push(faceOeil());
-        break;
-      case 2:
-        textures.push(faceO());
-        break;
-      case 3:
-        textures.push(faceAlphabet());
-        break;
-      case 4:
-        textures.push(faceMond());
-        break;
-      case 5:
-        textures.push(faceLook());
-        break;
-      default:
-        textures.push(faceDefault(i));
-        break;
-    }
-  }
+  // create all our faces in advance
+  // (each function returns a graphics object)
+  textures = [
+    faceRed(),
+    faceOeil(),
+    faceO(),
+    faceAlphabet(),
+    faceMond(),
+    faceLook(),
+  ];
+
 }
 
 function setup() {
@@ -84,6 +69,9 @@ function setup() {
 }
 
 function draw() {
+
+  orbitControl(); // the legit way of controlling a 3D sketch
+
   background(255);
 
   rotateX(angleX);
@@ -160,25 +148,27 @@ function draw() {
 
 }
 
-// Rotation logic:
-//   - horizontal drag: rotates x
-//   - vertical drag: rotates z
 function mouseDragged() {
   mode = 1; // automatically move to manual
-  let dx = mouseX - lastMouseX;
-  let dy = mouseY - lastMouseY;
-  angleX -= dy * rotationSpeed;
-  angleY += dx * rotationSpeed;
-  lastMouseX = mouseX;
-  lastMouseY = mouseY;
-  // console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
+
+  // Rotation logic (not actually needed, see orbitControl in draw()):
+  //   - horizontal drag: rotates x
+  //   - vertical drag: rotates z
+  // let dx = mouseX - lastMouseX;
+  // let dy = mouseY - lastMouseY;
+  // angleX -= dy * rotationSpeed;
+  // angleY += dx * rotationSpeed;
+  // lastMouseX = mouseX;
+  // lastMouseY = mouseY;
+  // // console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
 }
 
-function mousePressed() {
-  // Update the last mouse position when mouse is pressed to prevent jumping.
-  lastMouseX = mouseX;
-  lastMouseY = mouseY;
-}
+// function mousePressed() {
+//   // Rotation logic (not actually needed, see orbitControl in draw()).
+//   // Update the last mouse position when mouse is pressed to prevent jumping.
+//   lastMouseX = mouseX;
+//   lastMouseY = mouseY;
+// }
 
 function keyPressed() {
   // Press space to switch between automatic and mouse mode
@@ -221,6 +211,9 @@ function faceRed() {
   }
 
   // draw the three 'o's
+  // NOTE: I ran into issues with angleMode, so instead each time I need angles
+  // I write the angle I want, and turn it into radians (= the length of the
+  // arc of that angle on the unit circle)
   drawO(18, radians(150));
   drawO(23, radians(305));
   drawO(10, radians(55));
@@ -305,19 +298,23 @@ function faceOeil() {
   gfx.rotate(radians(180)); // rotate entire face (after translation)
 
   // the 'oeil' bit (right)
-  let radius1 = 45;
-  let radius2 = 20;
+  let radius1 = 45; // horizontal
+  let radius2 = 20; // vertical
   const nOeil = 7;
-  // using trigonometry and the equation of the ellipse, see here:
+  // using trigonometry and the equation of the ellipse, i.e.
+  // x = r1 * sin(angle), y = r2 * cos(angle), see here:
   // https://math.stackexchange.com/a/2019549
   for (let i = 0; i < nOeil; i++) {
-    const ang = PI - radians(30 * i);
+    const ang = PI - radians(30 * i); // I eyeballed this
     gfx.text('oeil', radius1 * sin(ang), radius2 * cos(ang));
   }
 
   // the 'o' bit (left)
   const nO = 5;
   for (let i = 0; i < nO; i++) {
+    // here I'm being a bit more systematic: I pick the starting angle
+    // (PI + rad(40°)), and the total arc (rad(125°)), and move by equal steps
+    // (dividing 125° by 5)
     const ang = PI + radians(40) + radians(125)/nO * i;
     gfx.text('o', radius1 * sin(ang), radius2 * cos(ang));
   }
