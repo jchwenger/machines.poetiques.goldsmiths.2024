@@ -43,9 +43,10 @@ let angleX = 0;
 let angleY = 0;
 let angleZ = 0;
 
-let lastMouseX = 0;
-let lastMouseY = 0;
-let rotationSpeed = 0.01;
+// // Rotation logic (not actually needed, see orbitControl in draw()):
+// let lastMouseX = 0;
+// let lastMouseY = 0;
+// let rotationSpeed = 0.01;
 
 let textures = [];
 
@@ -84,25 +85,25 @@ function draw() {
   for (let i = 0; i < 6; i++) {
     push();
     if (i === 0) {
-      translate(0, 0, 100); // front face
+      translate(0, 0, 100);   // front face
     } else if (i === 1) {
-      translate(0, 0, -100); // back face
+      translate(0, 0, -100);  // back face
       rotateY(PI);
     } else if (i === 2) {
-      translate(100, 0, 0); // right face
+      translate(100, 0, 0);   // right face
       rotateY(HALF_PI);
     } else if (i === 3) {
-      translate(-100, 0, 0); // left face
+      translate(-100, 0, 0);  // left face
       rotateY(-HALF_PI);
     } else if (i === 4) {
-      translate(0, 100, 0); // top face
+      translate(0, 100, 0);   // top face
       rotateX(-HALF_PI);
     } else if (i === 5) {
-      translate(0, -100, 0); // bottom face
+      translate(0, -100, 0);  // bottom face
       rotateX(HALF_PI);
     }
-    texture(textures[i]);
-    plane(200);
+    texture(textures[i]);     // add the texture
+    plane(200);               // draw a 200x200 plane
     pop();
   }
   endShape(CLOSE);
@@ -111,7 +112,7 @@ function draw() {
 
     // Using noise (walking a 'random but smooth' landscape):
     // Try commenting out two out of three to see only one movement!
-    // - noise() - .5 -> the number is within [-.5, .5], so that
+    // - noise() - .5 -> gives a number within [-.5, .5], so that
     //                   sometimes we go in one direction, sometimes
     //                   the other
     // - the division at the end controls the speed, making the update
