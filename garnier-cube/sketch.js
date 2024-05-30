@@ -145,6 +145,24 @@ function draw() {
     // angleZ = angleX * 0.1;
 
     // console.log(`angleX: ${angleX}, angleY: ${angleY}, angleZ: ${angleZ}`);
+
+    // // to save a smooth gif!
+    // // (comment out the random rotation code above)
+    // // see here: https://www.youtube.com/shorts/CEnfKhs6wLg
+    // //           https://p5js.org/reference/#/p5/saveGif
+    // const frames = 3000;
+    // angleX += TWO_PI/frames * 2 * 3;
+    // if (frameCount === frames) {
+    //   saveGif(
+    //     "cube.gif", frames, {
+    //       units: "frames",
+    //       delay: 0,
+    //     }
+    //   );
+    // }
+    // angleY = angleX*1/2;
+    // angleZ = angleX*1/3;
+
   }
 
 }
