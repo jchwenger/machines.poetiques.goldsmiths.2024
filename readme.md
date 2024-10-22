@@ -1,7 +1,7 @@
 # 'Machines Poétiques'
 ## Introducing textual systems through experimental French poetry
 
-Computational Arts MA/MFA Workshop, June 2024 ([slides](https://docs.google.com/presentation/d/1ENzaC1gPqC9Mn6noXgAKkzEvILhWjiv2ogXm8GSpArU/edit?usp=sharing)).
+Computational Arts MA/MFA Workshop, June 2024.
 
 Iris Colomb & Jérémie Wenger
 
