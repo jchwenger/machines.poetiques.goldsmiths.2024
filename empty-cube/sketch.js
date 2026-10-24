@@ -1,7 +1,8 @@
 let angle = 0;
 let textures = [];
 
-function preload() {
+function setup() {
+
   // Create graphics for each face of the cube
   for (let i = 0; i < 6; i++) {
     let gfx = createGraphics(200, 200);
@@ -12,9 +13,7 @@ function preload() {
     gfx.text('Face ' + (i + 1), 100, 100);
     textures.push(gfx);
   }
-}
 
-function setup() {
   createCanvas(400, 400, WEBGL);
 }
 
@@ -25,7 +24,6 @@ function draw() {
   rotateZ(angle * 0.1);
 
   // Draw each face of the cube with different textures
-  beginShape();
   for (let i = 0; i < 6; i++) {
     push();
     if (i === 0) {
@@ -50,7 +48,6 @@ function draw() {
     plane(200);
     pop();
   }
-  endShape(CLOSE);
 
   angle += 0.01;
 }
