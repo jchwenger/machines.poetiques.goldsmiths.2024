@@ -50,7 +50,7 @@ let angleZ = 0;
 
 let textures = [];
 
-function preload() {
+function setup() {
 
   // create all our faces in advance
   // (each function returns a graphics object)
@@ -63,9 +63,6 @@ function preload() {
     faceLook(),
   ];
 
-}
-
-function setup() {
   createCanvas(400, 400, WEBGL);
 }
 
@@ -81,7 +78,6 @@ function draw() {
 
   // Draw each face of the cube with different textures
   noStroke();
-  beginShape();
   for (let i = 0; i < 6; i++) {
     push();
     if (i === 0) {
@@ -106,7 +102,6 @@ function draw() {
     plane(200);               // draw a 200x200 plane
     pop();
   }
-  endShape(CLOSE);
 
   if (mode === 0) {
 
