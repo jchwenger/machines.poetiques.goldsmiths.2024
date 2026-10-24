@@ -19,6 +19,7 @@ function setup() {
 
 function draw() {
   background(50);
+  noStroke(); // remove triangle outlines in graphics
   rotateX(angle);
   rotateY(angle * 0.4);
   rotateZ(angle * 0.1);

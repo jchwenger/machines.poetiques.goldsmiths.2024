@@ -71,13 +71,13 @@ function draw() {
   orbitControl(); // the legit way of controlling a 3D sketch
 
   background(255);
+  noStroke(); // remove triangle outlines in graphics
 
   rotateX(angleX);
   rotateY(angleY);
   rotateZ(angleZ);
 
   // Draw each face of the cube with different textures
-  noStroke();
   for (let i = 0; i < 6; i++) {
     push();
     if (i === 0) {
